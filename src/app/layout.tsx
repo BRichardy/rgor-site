@@ -46,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="pt-BR"
       className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
+      style={{ colorScheme: "dark" }}
     >
       <body className="site-shell flex min-h-full flex-col font-sans">
         <SiteHeader />

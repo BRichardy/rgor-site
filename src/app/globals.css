@@ -1,15 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f3f5f8;
-  --bg-elevated: #ffffff;
-  --ink: #0f172a;
-  --ink-muted: #64748b;
-  --accent: #2563eb;
-  --accent-soft: #dbeafe;
-  --line: #e2e8f0;
-  --grid: rgba(37, 99, 235, 0.06);
-  --glow: rgba(37, 99, 235, 0.12);
+  color-scheme: dark;
+  --bg: #070b12;
+  --bg-elevated: #0f1520;
+  --ink: #e8eef7;
+  --ink-muted: #8b9bb4;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.16);
+  --line: #1e293b;
+  --grid: rgba(59, 130, 246, 0.09);
+  --glow: rgba(59, 130, 246, 0.2);
+  --glow-cyan: rgba(34, 211, 238, 0.1);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
+  --danger-border: rgba(248, 113, 113, 0.35);
+  --code-bg: #020617;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @theme inline {
@@ -20,6 +28,9 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-line: var(--line);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-border: var(--danger-border);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
@@ -29,26 +40,38 @@ html {
   scroll-behavior: smooth;
 }
 
+::selection {
+  background: rgba(59, 130, 246, 0.35);
+  color: var(--ink);
+}
+
 body {
   background-color: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
   background-image:
     radial-gradient(ellipse 90% 55% at 0% -10%, var(--glow), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(14, 165, 233, 0.08), transparent 50%),
+    radial-gradient(
+      ellipse 70% 45% at 100% 0%,
+      var(--glow-cyan),
+      transparent 50%
+    ),
     radial-gradient(ellipse 90% 55% at 100% 110%, var(--glow), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 0% 100%, rgba(14, 165, 233, 0.08), transparent 50%),
+    radial-gradient(
+      ellipse 70% 45% at 0% 100%,
+      var(--glow-cyan),
+      transparent 50%
+    ),
     linear-gradient(
       180deg,
-      #eef2f7 0%,
+      #0a1220 0%,
       var(--bg) 22%,
       var(--bg) 78%,
-      #eef2f7 100%
+      #0a1220 100%
     );
   background-attachment: fixed;
 }
 
-/* Grid no topo — forte sob o header, some para o meio */
 body::before {
   content: "";
   pointer-events: none;
@@ -66,7 +89,6 @@ body::before {
   );
 }
 
-/* Grid no rodapé — espelhado: aparece de baixo e liga no footer */
 body::after {
   content: "";
   pointer-events: none;
@@ -97,10 +119,26 @@ body::after {
   font-family: var(--font-mono), ui-monospace, monospace;
 }
 
+a,
+button {
+  transition:
+    color 180ms var(--ease-soft),
+    background-color 180ms var(--ease-soft),
+    border-color 180ms var(--ease-soft),
+    opacity 180ms var(--ease-soft),
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -117,32 +155,204 @@ body::after {
   }
 }
 
+@keyframes soft-scale {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .animate-fade-up {
-  animation: fade-up 0.55s ease-out both;
+  animation: fade-up 0.65s var(--ease-out) both;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.45s ease-out both;
+  animation: fade-in 0.5s var(--ease-soft) both;
+}
+
+.animate-soft-scale {
+  animation: soft-scale 0.85s var(--ease-out) both;
 }
 
 .feed-item {
-  animation: fade-up 0.55s ease-out both;
+  animation: fade-up 0.65s var(--ease-out) both;
 }
 
 .feed-item:nth-child(1) {
-  animation-delay: 0.04s;
+  animation-delay: 0.05s;
 }
 .feed-item:nth-child(2) {
-  animation-delay: 0.1s;
+  animation-delay: 0.12s;
 }
 .feed-item:nth-child(3) {
-  animation-delay: 0.16s;
+  animation-delay: 0.19s;
 }
 .feed-item:nth-child(4) {
-  animation-delay: 0.22s;
+  animation-delay: 0.26s;
 }
 .feed-item:nth-child(5) {
-  animation-delay: 0.28s;
+  animation-delay: 0.33s;
+}
+
+/* Reveal on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 {
+  transition-delay: 0.06s;
+}
+.reveal-delay-2 {
+  transition-delay: 0.12s;
+}
+.reveal-delay-3 {
+  transition-delay: 0.18s;
+}
+
+/* Header */
+.site-header {
+  transition:
+    background-color 240ms var(--ease-soft),
+    border-color 240ms var(--ease-soft),
+    box-shadow 240ms var(--ease-soft),
+    backdrop-filter 240ms var(--ease-soft);
+}
+
+.site-header.is-scrolled {
+  background-color: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+.brand-mark {
+  transition:
+    transform 260ms var(--ease-out),
+    border-color 200ms var(--ease-soft),
+    box-shadow 260ms var(--ease-out);
+}
+
+.group:hover .brand-mark {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* Feed / media */
+.media-frame {
+  overflow: hidden;
+  border-radius: 0.5rem;
+  isolation: isolate;
+}
+
+.media-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease-out);
+}
+
+.group:hover .media-frame img {
+  transform: scale(1.035);
+}
+
+.feed-row {
+  position: relative;
+  transition: padding-left 220ms var(--ease-out);
+}
+
+.feed-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition:
+    opacity 220ms var(--ease-soft),
+    transform 220ms var(--ease-out);
+}
+
+.group:hover .feed-row {
+  padding-left: 0.85rem;
+}
+
+.group:hover .feed-row::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.title-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition:
+    color 180ms var(--ease-soft),
+    background-size 280ms var(--ease-out);
+}
+
+.group:hover .title-link {
+  background-size: 100% 1.5px;
+}
+
+/* Buttons */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.6s var(--ease-out);
+}
+
+.btn-primary:hover::after {
+  transform: translateX(120%);
+}
+
+/* Forms */
+input,
+textarea,
+button,
+select {
+  transition:
+    border-color 180ms var(--ease-soft),
+    box-shadow 180ms var(--ease-soft),
+    background-color 180ms var(--ease-soft);
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
 }
 
 .prose-post {
@@ -176,6 +386,12 @@ body::after {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-thickness 160ms var(--ease-soft);
+}
+
+.prose-post a:hover {
+  text-decoration-thickness: 2px;
 }
 
 .prose-post ul,
@@ -200,7 +416,8 @@ body::after {
 }
 
 .prose-post pre {
-  background: #0f172a;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
   color: #e2e8f0;
   padding: 1rem 1.15rem;
   border-radius: 0.5rem;
@@ -215,14 +432,42 @@ body::after {
 }
 
 .cover-reveal {
-  animation: fade-in 0.7s ease-out both;
+  animation: soft-scale 0.9s var(--ease-out) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .animate-fade-up,
   .animate-fade-in,
+  .animate-soft-scale,
   .feed-item,
   .cover-reveal {
     animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  a,
+  button,
+  .media-frame img,
+  .feed-row,
+  .title-link,
+  .brand-mark {
+    transition: none !important;
+  }
+
+  .group:hover .media-frame img {
+    transform: none;
+  }
+
+  .group:hover .feed-row {
+    padding-left: 0;
   }
 }

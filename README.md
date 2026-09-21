@@ -28,7 +28,7 @@ cp .env.example .env.local
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Mesma página (anon / publishable key)                    |
 | `NEXT_PUBLIC_SITE_URL`          | `http://localhost:3000` local; URL da Vercel em produção |
 
-Sem as vars do Supabase, o **site público roda** com posts de exemplo. Publicar pelo admin exige Supabase.
+Sem as vars do Supabase, o site usa **modo local**: admin com `ADMIN_PASSWORD` e posts em `data/posts.json`.
 
 ### 3. Banco e storage
 

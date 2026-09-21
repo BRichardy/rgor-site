@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { site } from "@/content/site";
@@ -11,6 +12,14 @@ const links = [
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   if (pathname.startsWith("/admin")) {
     return null;
@@ -19,13 +28,17 @@ export function SiteHeader() {
   const isProfile = pathname.startsWith("/profile");
 
   return (
-    <header className="animate-fade-in sticky top-0 z-40 border-b border-line/90 bg-bg-elevated/85 backdrop-blur-xl">
+    <header
+      className={`site-header animate-fade-in sticky top-0 z-40 border-b border-line/90 bg-bg-elevated/80 backdrop-blur-xl ${
+        scrolled ? "is-scrolled" : ""
+      }`}
+    >
       <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
         {isProfile ? (
           <Link href="/profile" className="group flex items-center gap-3">
             <span
               aria-hidden
-              className="flex size-8 items-center justify-center rounded-md border border-line bg-accent-soft font-mono text-xs font-semibold text-accent transition-colors group-hover:border-accent/40"
+              className="brand-mark flex size-8 items-center justify-center rounded-md border border-line bg-accent-soft font-mono text-xs font-semibold text-accent"
             >
               {"</>"}
             </span>
@@ -42,7 +55,7 @@ export function SiteHeader() {
           <Link href="/" className="group flex items-center gap-3">
             <span
               aria-hidden
-              className="flex size-8 items-center justify-center rounded-md border border-line bg-accent-soft font-mono text-xs font-semibold text-accent transition-colors group-hover:border-accent/40"
+              className="brand-mark flex size-8 items-center justify-center rounded-md border border-line bg-accent-soft font-mono text-xs font-semibold text-accent"
             >
               ◈
             </span>
@@ -69,7 +82,7 @@ export function SiteHeader() {
                 className={
                   active
                     ? "rounded-md bg-accent-soft px-3 py-1.5 text-accent"
-                    : "rounded-md px-3 py-1.5 text-ink-muted transition-colors hover:bg-line/60 hover:text-ink"
+                    : "rounded-md px-3 py-1.5 text-ink-muted hover:bg-line/60 hover:text-ink"
                 }
               >
                 {link.label}

@@ -1,28 +1,29 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { redirect } from "next/navigation";
 import { deletePostAction } from "@/app/admin/actions";
 import { getAllPostsAdmin } from "@/lib/posts";
-import { hasSupabaseEnv } from "@/lib/supabase/env";
 
-export default async function AdminPostsPage() {
-  if (!hasSupabaseEnv()) {
-    redirect("/admin");
-  }
+type Props = {
+  searchParams: Promise<{ saved?: string; error?: string }>;
+};
+
+export default async function AdminPostsPage({ searchParams }: Props) {
+  const { saved, error: listError } = await searchParams;
 
   let posts;
   try {
     posts = await getAllPostsAdmin();
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Falha ao carregar posts";
+    const message =
+      err instanceof Error ? err.message : "Falha ao carregar posts";
     return (
       <div>
         <h1 className="font-display text-3xl font-semibold tracking-tight">
           Posts
         </h1>
-        <p className="mt-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
-          {message}. Confira se a migration SQL rodou no Supabase.
+        <p className="mt-4 border border-danger-border bg-danger-bg px-3 py-2 text-sm text-danger">
+          {message}
         </p>
       </div>
     );
@@ -36,12 +37,22 @@ export default async function AdminPostsPage() {
         </h1>
         <Link
           href="/admin/posts/new"
-          className="bg-ink px-4 py-2 text-sm font-medium text-bg-elevated transition-colors hover:bg-accent"
+          className="btn-primary bg-accent px-4 py-2 text-sm font-medium text-ink hover:bg-accent/85"
         >
           Novo post
         </Link>
       </div>
 
+      {saved === "1" ? (
+        <p className="mb-6 border border-accent/40 bg-accent-soft px-3 py-2 text-sm text-accent">
+          Post salvo.
+        </p>
+      ) : null}
+      {listError ? (
+        <p className="mb-6 border border-danger-border bg-danger-bg px-3 py-2 text-sm text-danger">
+          {listError}
+        </p>
+      ) : null}
       {posts.length === 0 ? (
         <p className="text-ink-muted">
           Nenhum post ainda.{" "}
@@ -72,14 +83,12 @@ export default async function AdminPostsPage() {
                 </p>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                {post.published ? (
-                  <Link
-                    href={`/posts/${post.slug}`}
-                    className="text-ink-muted hover:text-accent"
-                  >
-                    Ver
-                  </Link>
-                ) : null}
+                <Link
+                  href={`/admin/posts/${post.id}/view`}
+                  className="text-ink-muted hover:text-accent"
+                >
+                  Ver
+                </Link>
                 <Link
                   href={`/admin/posts/${post.id}`}
                   className="text-accent hover:underline"
@@ -88,7 +97,7 @@ export default async function AdminPostsPage() {
                 </Link>
                 <form action={deletePostAction}>
                   <input type="hidden" name="id" value={post.id} />
-                  <button type="submit" className="text-red-700 hover:underline">
+                  <button type="submit" className="text-danger hover:underline">
                     Excluir
                   </button>
                 </form>

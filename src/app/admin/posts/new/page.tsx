@@ -1,17 +1,11 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { PostEditor } from "@/components/post-editor";
-import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 type Props = {
   searchParams: Promise<{ error?: string }>;
 };
 
 export default async function NewPostPage({ searchParams }: Props) {
-  if (!hasSupabaseEnv()) {
-    redirect("/admin");
-  }
-
   const { error } = await searchParams;
 
   return (

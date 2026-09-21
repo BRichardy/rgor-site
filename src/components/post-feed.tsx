@@ -24,23 +24,21 @@ export function PostFeed({ posts }: { posts: Post[] }) {
       <article className="feed-item">
         <Link href={`/posts/${featured.slug}`} className="group block">
           {featured.cover_image_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={featured.cover_image_url}
-              alt=""
-              className="mb-5 aspect-[21/9] w-full rounded-lg object-cover"
-            />
+            <div className="media-frame mb-5 aspect-[21/9]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={featured.cover_image_url} alt="" />
+            </div>
           ) : null}
           <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-accent">
             Destaque
           </p>
-          <h2 className="font-display text-3xl font-semibold leading-tight tracking-tight text-ink transition-colors group-hover:text-accent sm:text-4xl">
+          <h2 className="title-link font-display text-3xl font-semibold leading-tight tracking-tight text-ink group-hover:text-accent sm:text-4xl">
             {featured.title}
           </h2>
           <p className="mt-2 font-mono text-xs text-ink-muted">
             {formatDate(featured.published_at ?? featured.created_at)}
           </p>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg">
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted transition-colors duration-200 group-hover:text-ink/80 sm:text-lg">
             {featured.excerpt}
           </p>
         </Link>
@@ -51,14 +49,16 @@ export function PostFeed({ posts }: { posts: Post[] }) {
           {rest.map((post) => (
             <article key={post.id} className="feed-item py-7 first:pt-0">
               <Link href={`/posts/${post.slug}`} className="group block">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+                <div className="feed-row flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
                   <div className="min-w-0 flex-1">
-                    <h2 className="font-display text-xl font-semibold tracking-tight text-ink transition-colors group-hover:text-accent sm:text-2xl">
+                    <h2 className="title-link font-display text-xl font-semibold tracking-tight text-ink group-hover:text-accent sm:text-2xl">
                       {post.title}
                     </h2>
-                    <p className="mt-2 text-ink-muted">{post.excerpt}</p>
+                    <p className="mt-2 text-ink-muted transition-colors duration-200 group-hover:text-ink/75">
+                      {post.excerpt}
+                    </p>
                   </div>
-                  <time className="shrink-0 font-mono text-xs text-ink-muted">
+                  <time className="shrink-0 font-mono text-xs text-ink-muted transition-colors duration-200 group-hover:text-accent">
                     {formatDate(post.published_at ?? post.created_at)}
                   </time>
                 </div>

@@ -32,23 +32,23 @@ export function PostEditor({ post, error, saved }: Props) {
   const suggestedSlug = useMemo(() => toSlug(title), [title]);
 
   return (
-    <form
-      action={savePostAction}
-      className="flex flex-col gap-5"
-      encType="multipart/form-data"
-    >
+    <form action={savePostAction} className="flex flex-col gap-5">
       {post?.id ? <input type="hidden" name="id" value={post.id} /> : null}
       {post?.cover_image_url ? (
-        <input type="hidden" name="existing_cover" value={post.cover_image_url} />
+        <input
+          type="hidden"
+          name="existing_cover"
+          value={post.cover_image_url}
+        />
       ) : null}
 
       {error ? (
-        <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p className="border border-danger-border bg-danger-bg px-3 py-2 text-sm text-danger">
           {error}
         </p>
       ) : null}
       {saved ? (
-        <p className="border border-blue-200 bg-accent-soft px-3 py-2 text-sm text-accent">
+        <p className="border border-accent/40 bg-accent-soft px-3 py-2 text-sm text-accent">
           Salvo.
         </p>
       ) : null}
@@ -97,12 +97,20 @@ export function PostEditor({ post, error, saved }: Props) {
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium">Corpo (Markdown)</span>
+        <p className="text-xs leading-relaxed text-ink-muted">
+          Escreva em Markdown. Exemplos:{" "}
+          <code className="font-mono text-accent">## Título</code>,{" "}
+          <code className="font-mono text-accent">**negrito**</code>,{" "}
+          <code className="font-mono text-accent">- item</code>,{" "}
+          <code className="font-mono text-accent">[link](https://…)</code>
+        </p>
         <textarea
           name="body"
           required
           rows={16}
           value={body}
           onChange={(e) => setBody(e.target.value)}
+          placeholder={"## Introdução\n\nTexto do post com **destaque**.\n\n- ponto 1\n- ponto 2"}
           className="border border-line bg-bg-elevated px-3 py-2.5 font-mono text-sm outline-none focus:border-accent"
         />
       </label>
@@ -121,7 +129,7 @@ export function PostEditor({ post, error, saved }: Props) {
           type="file"
           name="cover"
           accept="image/*"
-          className="text-sm text-ink-muted file:mr-3 file:border-0 file:bg-ink file:px-3 file:py-1.5 file:text-sm file:text-bg-elevated"
+          className="text-sm text-ink-muted file:mr-3 file:border-0 file:bg-accent file:px-3 file:py-1.5 file:text-sm file:text-ink"
         />
       </label>
 
@@ -138,7 +146,7 @@ export function PostEditor({ post, error, saved }: Props) {
 
       <button
         type="submit"
-        className="mt-2 w-fit bg-ink px-5 py-2.5 text-sm font-medium text-bg-elevated transition-colors hover:bg-accent"
+        className="btn-primary mt-2 w-fit bg-accent px-5 py-2.5 text-sm font-medium text-ink hover:bg-accent/85"
       >
         {post ? "Salvar alterações" : "Criar post"}
       </button>

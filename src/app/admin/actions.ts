@@ -1,14 +1,24 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import {
+  getAdminPassword,
+  isLocalAdminAuthenticated,
+  LOCAL_ADMIN_COOKIE,
+  localAdminCookieOptions,
+  signAdminToken,
+} from "@/lib/local-auth";
+import { localUploadCover } from "@/lib/local-store";
 import {
   createPost,
   deletePost,
   slugify,
   updatePost,
 } from "@/lib/posts";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 function formString(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -28,9 +38,30 @@ function isRedirectError(err: unknown) {
   );
 }
 
+async function requireAdmin() {
+  if (hasSupabaseEnv()) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      redirect("/admin");
+    }
+    return;
+  }
+
+  if (!(await isLocalAdminAuthenticated())) {
+    redirect("/admin");
+  }
+}
+
 async function uploadCover(file: File | null): Promise<string | null> {
   if (!file || file.size === 0) {
     return null;
+  }
+
+  if (!hasSupabaseEnv()) {
+    return localUploadCover(file);
   }
 
   const supabase = await createClient();
@@ -51,10 +82,21 @@ async function uploadCover(file: File | null): Promise<string | null> {
 }
 
 export async function loginAction(formData: FormData) {
-  const email = formString(formData, "email");
-  const password = formString(formData, "password");
   const next = formString(formData, "next") || "/admin/posts";
+  const password = formString(formData, "password");
 
+  if (!hasSupabaseEnv()) {
+    if (password !== getAdminPassword()) {
+      redirect(`/admin?error=${encodeURIComponent("Senha incorreta.")}`);
+    }
+
+    const jar = await cookies();
+    const opts = localAdminCookieOptions(signAdminToken(password));
+    jar.set(opts.name, opts.value, opts);
+    redirect(next.startsWith("/admin") ? next : "/admin/posts");
+  }
+
+  const email = formString(formData, "email");
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -66,12 +108,20 @@ export async function loginAction(formData: FormData) {
 }
 
 export async function logoutAction() {
+  if (!hasSupabaseEnv()) {
+    const jar = await cookies();
+    jar.delete(LOCAL_ADMIN_COOKIE);
+    redirect("/admin");
+  }
+
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/admin");
 }
 
 export async function savePostAction(formData: FormData) {
+  await requireAdmin();
+
   const id = formString(formData, "id");
   const title = formString(formData, "title");
   const slugInput = formString(formData, "slug");
@@ -110,14 +160,11 @@ export async function savePostAction(formData: FormData) {
     published,
   };
 
-  let savedId = id;
-
   try {
     if (id) {
       await updatePost(id, input);
     } else {
-      const post = await createPost(input);
-      savedId = post.id;
+      await createPost(input);
     }
   } catch (err) {
     if (isRedirectError(err)) throw err;
@@ -129,10 +176,12 @@ export async function savePostAction(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/posts", "layout");
   revalidatePath("/admin/posts");
-  redirect(`/admin/posts/${savedId}?saved=1`);
+  redirect("/admin/posts?saved=1");
 }
 
 export async function deletePostAction(formData: FormData) {
+  await requireAdmin();
+
   const id = formString(formData, "id");
   if (!id) {
     redirect("/admin/posts");

@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { deletePostAction } from "@/app/admin/actions";
 import { PostEditor } from "@/components/post-editor";
 import { getPostByIdAdmin } from "@/lib/posts";
-import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -11,10 +10,6 @@ type Props = {
 };
 
 export default async function EditPostPage({ params, searchParams }: Props) {
-  if (!hasSupabaseEnv()) {
-    redirect("/admin");
-  }
-
   const { id } = await params;
   const { error, saved } = await searchParams;
   const post = await getPostByIdAdmin(id);
@@ -34,7 +29,7 @@ export default async function EditPostPage({ params, searchParams }: Props) {
         </Link>
         <form action={deletePostAction}>
           <input type="hidden" name="id" value={post.id} />
-          <button type="submit" className="text-sm text-red-700 hover:underline">
+          <button type="submit" className="text-sm text-danger hover:underline">
             Excluir
           </button>
         </form>

@@ -1,24 +1,22 @@
-import { samplePosts } from "@/content/sample-posts";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
+import {
+  localCreatePost,
+  localDeletePost,
+  localGetAllPosts,
+  localGetById,
+  localGetPublishedBySlug,
+  localGetPublishedPosts,
+  localUpdatePost,
+} from "@/lib/local-store";
 import type { Post, PostInput } from "@/lib/types";
-
-function slugify(title: string) {
-  return title
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+import { slugify } from "@/lib/slug";
 
 export { slugify };
 
 export async function getPublishedPosts(): Promise<Post[]> {
   if (!hasSupabaseEnv()) {
-    return samplePosts;
+    return localGetPublishedPosts();
   }
 
   const supabase = await createClient();
@@ -30,11 +28,11 @@ export async function getPublishedPosts(): Promise<Post[]> {
 
   if (error) {
     console.error("getPublishedPosts:", error.message);
-    return samplePosts;
+    return localGetPublishedPosts();
   }
 
   if (!data?.length) {
-    return samplePosts;
+    return localGetPublishedPosts();
   }
 
   return data as Post[];
@@ -44,7 +42,7 @@ export async function getPublishedPostBySlug(
   slug: string,
 ): Promise<Post | null> {
   if (!hasSupabaseEnv()) {
-    return samplePosts.find((p) => p.slug === slug) ?? null;
+    return localGetPublishedBySlug(slug);
   }
 
   const supabase = await createClient();
@@ -57,17 +55,21 @@ export async function getPublishedPostBySlug(
 
   if (error) {
     console.error("getPublishedPostBySlug:", error.message);
-    return samplePosts.find((p) => p.slug === slug) ?? null;
+    return localGetPublishedBySlug(slug);
   }
 
   if (!data) {
-    return samplePosts.find((p) => p.slug === slug) ?? null;
+    return localGetPublishedBySlug(slug);
   }
 
   return data as Post;
 }
 
 export async function getAllPostsAdmin(): Promise<Post[]> {
+  if (!hasSupabaseEnv()) {
+    return localGetAllPosts();
+  }
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("posts")
@@ -82,6 +84,10 @@ export async function getAllPostsAdmin(): Promise<Post[]> {
 }
 
 export async function getPostByIdAdmin(id: string): Promise<Post | null> {
+  if (!hasSupabaseEnv()) {
+    return localGetById(id);
+  }
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("posts")
@@ -97,6 +103,10 @@ export async function getPostByIdAdmin(id: string): Promise<Post | null> {
 }
 
 export async function createPost(input: PostInput): Promise<Post> {
+  if (!hasSupabaseEnv()) {
+    return localCreatePost(input);
+  }
+
   const supabase = await createClient();
   const publishedAt =
     input.published && !input.published_at
@@ -128,6 +138,10 @@ export async function updatePost(
   id: string,
   input: PostInput,
 ): Promise<Post> {
+  if (!hasSupabaseEnv()) {
+    return localUpdatePost(id, input);
+  }
+
   const supabase = await createClient();
 
   const existing = await getPostByIdAdmin(id);
@@ -135,9 +149,6 @@ export async function updatePost(
 
   if (input.published && !publishedAt) {
     publishedAt = new Date().toISOString();
-  }
-  if (!input.published) {
-    publishedAt = publishedAt;
   }
 
   const { data, error } = await supabase
@@ -164,6 +175,10 @@ export async function updatePost(
 }
 
 export async function deletePost(id: string): Promise<void> {
+  if (!hasSupabaseEnv()) {
+    return localDeletePost(id);
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.from("posts").delete().eq("id", id);
 

@@ -15,7 +15,10 @@ export default async function HomePage() {
         <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-5xl">
           Notas sobre software, dados e o que eu testo na prática.
         </h1>
-        <p className="mt-5 text-lg leading-relaxed text-ink-muted">
+        <p
+          className="mt-5 text-lg leading-relaxed text-ink-muted animate-fade-up"
+          style={{ animationDelay: "0.1s" }}
+        >
           Manchetes e experiências úteis — o projeto vivo por trás do portfólio.
         </p>
       </section>

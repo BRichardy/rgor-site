@@ -29,7 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.excerpt,
       type: "article",
       publishedTime: post.published_at ?? undefined,
-      images: post.cover_image_url ? [{ url: post.cover_image_url }] : undefined,
+      images: post.cover_image_url
+        ? [{ url: post.cover_image_url }]
+        : undefined,
       siteName: site.name,
     },
     twitter: {
@@ -71,12 +73,10 @@ export default async function PostPage({ params }: Props) {
       </header>
 
       {post.cover_image_url ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={post.cover_image_url}
-          alt=""
-          className="cover-reveal mb-10 aspect-[16/9] w-full rounded-lg object-cover"
-        />
+        <div className="media-frame cover-reveal mb-10 aspect-[16/9]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={post.cover_image_url} alt="" />
+        </div>
       ) : null}
 
       <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>

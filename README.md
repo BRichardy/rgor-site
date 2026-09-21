@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RGOR — Portfólio + notas técnicas
 
-## Getting Started
+Site em **português brasileiro**: portfólio de tecnologia e espaço para publicar posts sobre software, dados e ferramentas.
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router) + TypeScript + Tailwind CSS
+- Supabase (Auth, Postgres, Storage)
+- Deploy: Vercel
+
+## Setup local
+
+### 1. Instalar
+
+```bash
+npm install
+```
+
+### 2. Ambiente
+
+```bash
+cp .env.example .env.local
+```
+
+| Variável                        | Onde pegar                                               |
+| ------------------------------- | -------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase → Project Settings → API                        |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Mesma página (anon / publishable key)                    |
+| `NEXT_PUBLIC_SITE_URL`          | `http://localhost:3000` local; URL da Vercel em produção |
+
+Sem as vars do Supabase, o **site público roda** com posts de exemplo. Publicar pelo admin exige Supabase.
+
+### 3. Banco e storage
+
+No SQL Editor do Supabase, rode:
+
+1. [`supabase/migrations/20260321000000_posts.sql`](supabase/migrations/20260321000000_posts.sql)
+2. Opcional: [`supabase/seed.sql`](supabase/seed.sql)
+
+### 4. Usuário admin
+
+Supabase → **Authentication** → **Users** → **Add user** (e-mail + senha).
+
+### 5. Rodar
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Início: http://localhost:3000
+- Perfil: http://localhost:3000/profile
+- Admin: http://localhost:3000/admin
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Personalizar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Perfil: [`src/content/profile.ts`](src/content/profile.ts)
+- Marca / tagline: [`src/content/site.ts`](src/content/site.ts)
 
-## Learn More
+## Rotas
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Path            | Função        |
+| --------------- | ------------- |
+| `/`             | Feed de posts |
+| `/posts/[slug]` | Post          |
+| `/profile`      | Portfólio     |
+| `/admin`        | Login         |
+| `/admin/posts`  | CRUD          |

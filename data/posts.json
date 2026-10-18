@@ -1,0 +1,74 @@
+[
+  {
+    "id": "20be2039-4077-4475-9bf5-3ffea2285ae4",
+    "title": "AE TITULO",
+    "slug": "ae-titulo",
+    "excerpt": "RESUMÃO",
+    "body": "[{\"id\":\"b_mumjxbis_198xj9y\",\"type\":\"text\",\"content\":\"#MARKDOWN AINDA FUNCION?\\n\\n**NEGRITO**\\n\\nNÃO NEGRITO\\n\\n\"},{\"id\":\"b_mumjxhgk_blhst1z\",\"type\":\"image\",\"url\":\"/uploads/1790678811040-wdg2a5ajoxl.jpg\",\"alt\":\"\"},{\"id\":\"b_mumjxkxy_6pjmcua\",\"type\":\"text\",\"content\":\"ALOOWWWWW\"}]",
+    "cover_image_url": "/uploads/1790678860234-2y7yalb9v04.png",
+    "published": false,
+    "published_at": null,
+    "created_at": "2026-09-29T10:47:40.236Z",
+    "updated_at": "2026-09-29T10:47:40.236Z"
+  },
+  {
+    "id": "post-python-automacoes",
+    "title": "Por que eu escolho Python para automações",
+    "slug": "por-que-eu-escolho-python-para-automacoes",
+    "excerpt": "Em suporte e produtos próprios, Python encurta o caminho entre ideia e script que roda sozinho.",
+    "body": "Quando preciso automatizar uma rotina — relatórios, scraping, webhook, job noturno — **Python** quase sempre é a primeira ferramenta que abro.\r\n\r\n## O que funciona bem na prática\r\n\r\n- Ecossistema maduro: `requests`, BeautifulSoup, Selenium, FastAPI\r\n- Legibilidade: daqui a seis meses eu ainda entendo o que escrevi\r\n- Deploy simples em VPS com Docker ou um cron + venv\r\n\r\nNo ZapTree, a orquestração, os módulos e a API REST nascem em Python 3.11+. Isso não é preferência estética — é velocidade de entrega com código que eu consigo manter.\r\n\r\n## Quando eu não forço Python\r\n\r\nInterface rica, SEO e app web com muita interação: aí Next.js / TypeScript entram. O ponto não é religião de linguagem. É escolher a ferramenta que resolve o problema **hoje** e não cria dívida ridícula amanhã.\r\n\r\n## Conclusão\r\n\r\nSe o trabalho é **dados + APIs + automação**, Python continua sendo meu default. E é o que eu mais gosto de escrever.",
+    "cover_image_url": "/uploads/python-automation.jpg",
+    "published": true,
+    "published_at": "2026-09-21T20:00:00.000Z",
+    "created_at": "2026-09-21T20:00:00.000Z",
+    "updated_at": "2026-09-21T23:18:45.386Z"
+  },
+  {
+    "id": "post-ia-no-workflow",
+    "title": "IA no workflow: acelerar sem terceirizar o julgamento",
+    "slug": "ia-no-workflow-acelerar-sem-terceirizar-o-julgamento",
+    "excerpt": "Cursor e Claude mudaram como eu escrevo código — mas o critério de qualidade continua sendo meu.",
+    "body": "Uso IA no dia a dia de desenvolvimento: scaffold, refatoração, rascunho de docs, exploração de APIs. A produtividade sobe. O risco também — se você desligar o cérebro.\n\n## O que eu delego\n\n- Boilerplate e estrutura inicial de features\n- Explicação de erros e logs densos\n- Alternativas de desenho (\"como você modelaria isso?\")\n\n## O que eu não delego\n\n- Decisão de arquitetura em produção\n- Validação de comportamento com usuário real\n- Commit sem ler o diff\n\nEm suporte técnico isso fica ainda mais claro: uma resposta confiante e errada custa tempo de pessoa. No código, custa incidente.\n\n## Regra prática\n\nTrato a IA como **par júnior rápido**: gera hipóteses e rascunhos. Eu reviso, testo e assumo a entrega.\n\nEsse site e o admin local nasceram assim — com assistência, mas com ownership meu em cada decisão.",
+    "cover_image_url": "/uploads/ai-workflow.jpg",
+    "published": true,
+    "published_at": "2026-09-20T18:30:00.000Z",
+    "created_at": "2026-09-20T18:30:00.000Z",
+    "updated_at": "2026-09-20T18:30:00.000Z"
+  },
+  {
+    "id": "post-sql-rapido",
+    "title": "SQL rápido para quem vive de incidentes",
+    "slug": "sql-rapido-para-quem-vive-de-incidentes",
+    "excerpt": "Nem todo problema precisa de um pipeline. Às vezes você precisa de uma query boa em cinco minutos.",
+    "body": "Em suporte e ops, a pergunta chega assim: \"quantos usuários falharam ontem?\", \"esse ID aparece em mais de um lugar?\", \"quando isso começou?\".\n\nFerramentas embutidas tipo **DuckDB** (ou um SQL direto no banco que você já tem) resolvem esse tipo de corte sem esperar um time de dados.\n\n## O hábito que eu cultivei\n\n1. Entender a pergunta em uma frase\n2. Isolar a tabela / arquivo certo\n3. Query mínima, depois filtros\n4. Conferir o resultado com um caso conhecido\n\n## Por que isso importa para um dev\n\nQuem só escreve feature e nunca olha dado de produção demora mais para debugar. SQL não é \"coisa de DBA\" — é alfabetização técnica.\n\nMySQL, SQLite e Firebase cobrem mundos diferentes nos meus projetos. O que se repete é a mesma disciplina: **pergunta clara → evidência → ação**.\n\nVou continuar publicando notas curtas assim: o que uso de verdade quando o relógio está andando.",
+    "cover_image_url": "/uploads/data-sql.jpg",
+    "published": true,
+    "published_at": "2026-09-19T15:00:00.000Z",
+    "created_at": "2026-09-19T15:00:00.000Z",
+    "updated_at": "2026-09-19T15:00:00.000Z"
+  },
+  {
+    "id": "sample-1",
+    "title": "GPT Astra é bom de verdade?",
+    "slug": "gpt-astra-e-bom-de-verdade",
+    "excerpt": "Testei em tarefas reais de suporte e de código. O que aguentou — e o que não.",
+    "body": "Toda semana surge um nome novo de modelo. GPT Astra é um deles. Antes de recomendar no trabalho — ou de construir em cima — eu quero uma resposta clara: **é bom de verdade?**\n\n## O que eu testei\n\n1. **Troubleshooting de suporte** — relatos vagos, logs e o clássico “ontem funcionava”.\n2. **Scaffold full stack** — uma feature pequena em Next.js com auth e formulário.\n3. **Escrita** — transformar rascunhos em algo que eu publicaria aqui.\n\n## Conclusão\n\n**Sim — com supervisão.** Útil para rascunhos e primeira passagem de código. Não substitui julgamento.",
+    "cover_image_url": null,
+    "published": true,
+    "published_at": "2026-03-18T12:00:00.000Z",
+    "created_at": "2026-03-18T12:00:00.000Z",
+    "updated_at": "2026-03-18T12:00:00.000Z"
+  },
+  {
+    "id": "sample-2",
+    "title": "DuckDB e a onda da nuvem",
+    "slug": "duckdb-e-a-onda-da-nuvem",
+    "excerpt": "Por que o DuckDB aparece tanto — e o que um movimento cloud mudaria para quem vive em SQL.",
+    "body": "O DuckDB continua aparecendo em conversas sobre analytics sem precisar de um time de data warehouse.\n\nÉ embutido, rápido para cargas locais e médias, e amigável se você já pensa em SQL.\n\nVou escrever mais conforme a história evoluir.",
+    "cover_image_url": null,
+    "published": true,
+    "published_at": "2026-03-10T15:30:00.000Z",
+    "created_at": "2026-03-10T15:30:00.000Z",
+    "updated_at": "2026-03-10T15:30:00.000Z"
+  }
+]

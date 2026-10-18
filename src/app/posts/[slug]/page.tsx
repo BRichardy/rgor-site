@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Markdown } from "@/components/markdown";
+import { PostBody } from "@/components/post-body";
 import { site } from "@/content/site";
 import { getPublishedPostBySlug } from "@/lib/posts";
 
@@ -80,7 +80,7 @@ export default async function PostPage({ params }: Props) {
       ) : null}
 
       <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
-        <Markdown content={post.body} />
+        <PostBody body={post.body} />
       </div>
     </article>
   );

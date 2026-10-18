@@ -67,7 +67,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
         </label>
         <button
           type="submit"
-          className="btn-primary mt-2 bg-accent px-4 py-2.5 text-sm font-medium text-ink hover:bg-accent/85"
+          className="btn-primary mt-2 bg-accent px-4 py-2.5 text-sm font-medium text-on-accent hover:bg-accent/85"
         >
           Entrar
         </button>

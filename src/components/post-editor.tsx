@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { savePostAction } from "@/app/admin/actions";
+import { BlockEditor } from "@/components/block-editor";
+import { ensureEditableBlocks } from "@/lib/blocks";
 import type { Post } from "@/lib/types";
 
 function toSlug(title: string) {
@@ -26,7 +28,9 @@ export function PostEditor({ post, error, saved }: Props) {
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(Boolean(post?.slug));
   const [excerpt, setExcerpt] = useState(post?.excerpt ?? "");
-  const [body, setBody] = useState(post?.body ?? "");
+  const [blocks, setBlocks] = useState(() =>
+    ensureEditableBlocks(post?.body ?? ""),
+  );
   const [published, setPublished] = useState(post?.published ?? false);
 
   const suggestedSlug = useMemo(() => toSlug(title), [title]);
@@ -95,25 +99,7 @@ export function PostEditor({ post, error, saved }: Props) {
         />
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm">
-        <span className="font-medium">Corpo (Markdown)</span>
-        <p className="text-xs leading-relaxed text-ink-muted">
-          Escreva em Markdown. Exemplos:{" "}
-          <code className="font-mono text-accent">## Título</code>,{" "}
-          <code className="font-mono text-accent">**negrito**</code>,{" "}
-          <code className="font-mono text-accent">- item</code>,{" "}
-          <code className="font-mono text-accent">[link](https://…)</code>
-        </p>
-        <textarea
-          name="body"
-          required
-          rows={16}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          placeholder={"## Introdução\n\nTexto do post com **destaque**.\n\n- ponto 1\n- ponto 2"}
-          className="border border-line bg-bg-elevated px-3 py-2.5 font-mono text-sm outline-none focus:border-accent"
-        />
-      </label>
+      <BlockEditor blocks={blocks} onChange={setBlocks} />
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium">Imagem de capa</span>
@@ -129,7 +115,7 @@ export function PostEditor({ post, error, saved }: Props) {
           type="file"
           name="cover"
           accept="image/*"
-          className="text-sm text-ink-muted file:mr-3 file:border-0 file:bg-accent file:px-3 file:py-1.5 file:text-sm file:text-ink"
+          className="text-sm text-ink-muted file:mr-3 file:border-0 file:bg-accent file:px-3 file:py-1.5 file:text-sm file:text-on-accent"
         />
       </label>
 
@@ -146,7 +132,7 @@ export function PostEditor({ post, error, saved }: Props) {
 
       <button
         type="submit"
-        className="btn-primary mt-2 w-fit bg-accent px-5 py-2.5 text-sm font-medium text-ink hover:bg-accent/85"
+        className="btn-primary mt-2 w-fit bg-accent px-5 py-2.5 text-sm font-medium text-on-accent hover:bg-accent/85"
       >
         {post ? "Salvar alterações" : "Criar post"}
       </button>

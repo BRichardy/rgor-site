@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { ThemeProvider } from "@/components/theme-provider";
 import { site } from "@/content/site";
+import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -45,13 +47,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
-      style={{ colorScheme: "dark" }}
+      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased dark`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="site-shell flex min-h-full flex-col font-sans">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <ThemeProvider>
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </ThemeProvider>
       </body>
     </html>
   );

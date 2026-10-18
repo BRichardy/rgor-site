@@ -29,7 +29,7 @@ export function ProfileContent({ homeHref = "/", className = "" }: Props) {
           {profile.focus.map((item) => (
             <li
               key={item}
-              className="flex gap-3 text-sm text-ink-muted before:mt-2 before:block before:size-1.5 before:shrink-0 before:rounded-full before:bg-accent before:shadow-[0_0_8px_rgba(59,130,246,0.55)]"
+              className="flex gap-3 text-sm text-ink-muted before:mt-2 before:block before:size-1.5 before:shrink-0 before:rounded-full before:bg-accent before:shadow-[0_0_8px_var(--accent-glow)]"
             >
               {item}
             </li>
@@ -168,7 +168,7 @@ export function ProfileContent({ homeHref = "/", className = "" }: Props) {
             >
               <span
                 aria-hidden
-                className="absolute -left-[1.41rem] top-1.5 size-2 rounded-full bg-accent shadow-[0_0_10px_rgba(59,130,246,0.55)]"
+                className="absolute -left-[1.41rem] top-1.5 size-2 rounded-full bg-accent shadow-[0_0_10px_var(--accent-glow)]"
               />
               <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                 <h3 className="font-medium text-ink">

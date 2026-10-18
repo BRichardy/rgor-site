@@ -11,6 +11,7 @@ import {
   signAdminToken,
 } from "@/lib/local-auth";
 import { localUploadCover } from "@/lib/local-store";
+import { parseBody } from "@/lib/blocks";
 import {
   createPost,
   deletePost,
@@ -81,6 +82,57 @@ async function uploadCover(file: File | null): Promise<string | null> {
   return data.publicUrl;
 }
 
+function bodyHasContent(body: string) {
+  return parseBody(body).some(
+    (block) =>
+      block.type === "image" ||
+      (block.type === "text" && block.content.trim().length > 0),
+  );
+}
+
+async function assertAdmin(): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (hasSupabaseEnv()) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return { ok: false, error: "Não autenticado." };
+    }
+    return { ok: true };
+  }
+
+  if (!(await isLocalAdminAuthenticated())) {
+    return { ok: false, error: "Não autenticado." };
+  }
+  return { ok: true };
+}
+
+/** Upload de imagem para bloco do corpo (retorna URL). */
+export async function uploadImageAction(formData: FormData) {
+  const auth = await assertAdmin();
+  if (!auth.ok) {
+    return { error: auth.error };
+  }
+
+  const file = formData.get("file") as File | null;
+  if (!file || file.size === 0) {
+    return { error: "Arquivo inválido." };
+  }
+
+  try {
+    const url = await uploadCover(file);
+    if (!url) {
+      return { error: "Falha no upload." };
+    }
+    return { url };
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Falha no upload.",
+    };
+  }
+}
+
 export async function loginAction(formData: FormData) {
   const next = formString(formData, "next") || "/admin/posts";
   const password = formString(formData, "password");
@@ -131,10 +183,17 @@ export async function savePostAction(formData: FormData) {
   const existingCover = formString(formData, "existing_cover") || null;
   const file = formData.get("cover") as File | null;
 
-  if (!title || !body) {
+  if (!title) {
     const target = id ? `/admin/posts/${id}` : "/admin/posts/new";
     redirect(
-      `${target}?error=${encodeURIComponent("Título e corpo são obrigatórios.")}`,
+      `${target}?error=${encodeURIComponent("Título é obrigatório.")}`,
+    );
+  }
+
+  if (!bodyHasContent(body)) {
+    const target = id ? `/admin/posts/${id}` : "/admin/posts/new";
+    redirect(
+      `${target}?error=${encodeURIComponent("Adicione texto ou imagem ao corpo.")}`,
     );
   }
 

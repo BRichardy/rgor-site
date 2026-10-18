@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
-:root {
+:root,
+html.dark {
   color-scheme: dark;
   --bg: #070b12;
+  --bg-deep: #0a1220;
   --bg-elevated: #0f1520;
   --ink: #e8eef7;
   --ink-muted: #8b9bb4;
   --accent: #3b82f6;
   --accent-soft: rgba(59, 130, 246, 0.16);
+  --accent-glow: rgba(59, 130, 246, 0.55);
   --line: #1e293b;
   --grid: rgba(59, 130, 246, 0.09);
   --glow: rgba(59, 130, 246, 0.2);
@@ -16,8 +19,38 @@
   --danger-bg: rgba(248, 113, 113, 0.12);
   --danger-border: rgba(248, 113, 113, 0.35);
   --code-bg: #020617;
+  --code-ink: #e2e8f0;
+  --header-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  --overlay: rgba(0, 0, 0, 0.6);
+  --selection: rgba(59, 130, 246, 0.35);
+  --on-accent: #f8fafc;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.light {
+  color-scheme: light;
+  --bg: #f4f7fb;
+  --bg-deep: #e8eef8;
+  --bg-elevated: #ffffff;
+  --ink: #0f172a;
+  --ink-muted: #5b6b82;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --accent-glow: rgba(37, 99, 235, 0.35);
+  --line: #d7e0ec;
+  --grid: rgba(37, 99, 235, 0.08);
+  --glow: rgba(37, 99, 235, 0.12);
+  --glow-cyan: rgba(8, 145, 178, 0.08);
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+  --danger-border: rgba(220, 38, 38, 0.28);
+  --code-bg: #0f172a;
+  --code-ink: #e2e8f0;
+  --header-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  --overlay: rgba(15, 23, 42, 0.45);
+  --selection: rgba(37, 99, 235, 0.22);
+  --on-accent: #f8fafc;
 }
 
 @theme inline {
@@ -31,6 +64,7 @@
   --color-danger: var(--danger);
   --color-danger-bg: var(--danger-bg);
   --color-danger-border: var(--danger-border);
+  --color-on-accent: var(--on-accent);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
@@ -41,11 +75,13 @@ html {
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.35);
+  background: var(--selection);
   color: var(--ink);
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   background-color: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
@@ -64,51 +100,41 @@ body {
     ),
     linear-gradient(
       180deg,
-      #0a1220 0%,
+      var(--bg-deep) 0%,
       var(--bg) 22%,
       var(--bg) 78%,
-      #0a1220 100%
+      var(--bg-deep) 100%
     );
   background-attachment: fixed;
+  transition:
+    background-color 220ms var(--ease-soft),
+    color 220ms var(--ease-soft);
 }
 
-body::before {
-  content: "";
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 0%,
-    black 20%,
-    transparent 75%
-  );
-}
-
+/* Grid decor: page top/bottom only — does not stick to the viewport */
+body::before,
 body::after {
   content: "";
   pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: min(42vh, 28rem);
   background-image:
     linear-gradient(var(--grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 48px 48px;
-  mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 100%,
-    black 20%,
-    transparent 75%
-  );
 }
 
-.site-shell {
-  position: relative;
-  z-index: 1;
+body::before {
+  top: 0;
+  mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 100%);
+}
+
+body::after {
+  bottom: 0;
+  mask-image: linear-gradient(to top, black 0%, black 35%, transparent 100%);
 }
 
 .font-display {
@@ -234,7 +260,7 @@ button {
 .site-header.is-scrolled {
   background-color: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
   border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--header-shadow);
 }
 
 .brand-mark {
@@ -418,7 +444,7 @@ textarea:focus {
 .prose-post pre {
   background: var(--code-bg);
   border: 1px solid var(--line);
-  color: #e2e8f0;
+  color: var(--code-ink);
   padding: 1rem 1.15rem;
   border-radius: 0.5rem;
   overflow-x: auto;

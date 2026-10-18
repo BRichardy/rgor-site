@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/app/admin/actions";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const links = [
   { href: "/admin/inicio", label: "Início", match: (p: string) => p.startsWith("/admin/inicio") },
@@ -24,13 +25,14 @@ export function AdminHeader({ label }: { label: string | null }) {
   if (pathname === "/admin") {
     return (
       <header className="border-b border-line bg-bg-elevated/80">
-        <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
           <Link
             href="/admin"
             className="font-display text-xl font-semibold text-ink"
           >
             Admin
           </Link>
+          <ThemeToggle />
         </div>
       </header>
     );
@@ -38,7 +40,7 @@ export function AdminHeader({ label }: { label: string | null }) {
 
   return (
     <header className="border-b border-line bg-bg-elevated/80">
-      <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
         <div className="flex flex-wrap items-center gap-4">
           <Link
             href="/admin/posts"
@@ -66,6 +68,7 @@ export function AdminHeader({ label }: { label: string | null }) {
           </nav>
         </div>
         <div className="flex items-center gap-3 text-sm">
+          <ThemeToggle />
           <Link
             href="/"
             className="hidden text-ink-muted transition-colors hover:text-accent sm:inline"

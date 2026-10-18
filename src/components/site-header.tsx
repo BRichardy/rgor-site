@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { site } from "@/content/site";
 
 const links = [
@@ -69,27 +70,30 @@ export function SiteHeader() {
             </span>
           </Link>
         )}
-        <nav className="flex items-center gap-1 text-sm font-medium">
-          {links.map((link) => {
-            const active =
-              link.href === "/"
-                ? pathname === "/" || pathname.startsWith("/posts")
-                : pathname.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={
-                  active
-                    ? "rounded-md bg-accent-soft px-3 py-1.5 text-accent"
-                    : "rounded-md px-3 py-1.5 text-ink-muted hover:bg-line/60 hover:text-ink"
-                }
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="flex items-center gap-2">
+          <nav className="flex items-center gap-1 text-sm font-medium">
+            {links.map((link) => {
+              const active =
+                link.href === "/"
+                  ? pathname === "/" || pathname.startsWith("/posts")
+                  : pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={
+                    active
+                      ? "rounded-md bg-accent-soft px-3 py-1.5 text-accent"
+                      : "rounded-md px-3 py-1.5 text-ink-muted hover:bg-line/60 hover:text-ink"
+                  }
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

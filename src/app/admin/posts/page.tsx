@@ -37,7 +37,7 @@ export default async function AdminPostsPage({ searchParams }: Props) {
         </h1>
         <Link
           href="/admin/posts/new"
-          className="btn-primary bg-accent px-4 py-2 text-sm font-medium text-ink hover:bg-accent/85"
+          className="btn-primary bg-accent px-4 py-2 text-sm font-medium text-on-accent hover:bg-accent/85"
         >
           Novo post
         </Link>

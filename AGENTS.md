@@ -15,7 +15,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 Site pessoal de tecnologia em português brasileiro, com duas funções:
 
 - **Perfil**: apresentar Ricardo, sua trajetória e seus projetos como desenvolvedor.
-- **Início**: feed pessoal de notas e experiências sobre software, dados, ferramentas e tecnologia. Não é um jornal profissional.
+- **Início**: feed pessoal de notas e experiências sobre software, dados, ferramentas e tecnologia. Não é um jornal profissional nem uma publicação jornalística.
 
 O projeto também serve como produto demonstrável: inclui publicação, administração, upload de imagens, temas e renderização de conteúdo.
 
@@ -72,11 +72,13 @@ O editor permite adicionar blocos de texto e imagem, mover e excluir blocos, for
 
 ## Estado atual
 
-- Projeto local sincronizado com GitHub na branch `main`.
-- Última sincronização registrada: commit `c65d122` (editor por blocos, alternância de tema e conteúdo local).
+- Repositório: `https://github.com/BRichardy/rgor-site`, branch `main`.
+- Em 26/10/2026, antes do commit desta documentação, o código local estava sincronizado com `origin/main` no commit `6109692`.
 - Posts locais e imagens de upload estão no repositório; `.env.local`, `node_modules/` e `.next/` ficam excluídos.
 - O site está em desenvolvimento local; não há publicação de produção assumida neste contexto.
 - O projeto tem CRUD local, mas não há evidência aqui de implantação ou configuração de um projeto Supabase remoto.
+- O histórico, riscos conhecidos, inventário e próximos passos estão em [`docs/rgor-site/PROJECT-HANDOFF.md`](docs/rgor-site/PROJECT-HANDOFF.md).
+- `docs/PRD-site-freelancer.md`, quando presente apenas na cópia de trabalho, é de outro produto e não deve ser misturado a este repositório.
 
 ## Comandos
 
@@ -96,3 +98,4 @@ URLs locais: `http://localhost:3000`, `/profile` e `/admin`.
 - Não coloque credenciais em arquivos versionados; mantenha `.env.local` fora do Git.
 - Antes de alterar código Next.js, leia a documentação instalada indicada no bloco Next.js acima, pois a versão do framework pode ter APIs diferentes das conhecidas.
 - Ao alterar persistência, verifique ambos os caminhos: modo local e Supabase, quando aplicável.
+- Não transforme este site no novo site freelancer nem na página de finanças. São produtos e contextos separados; mantenha seus documentos, protótipos e código fora deste repositório.

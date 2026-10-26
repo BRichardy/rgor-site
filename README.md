@@ -1,12 +1,14 @@
-# RGOR — Portfólio + notas técnicas
+# RGOR — Perfil + notas técnicas
 
-Site em **português brasileiro**: portfólio de tecnologia e espaço para publicar posts sobre software, dados e ferramentas.
+Site pessoal em **português brasileiro** com perfil/portfólio de tecnologia e feed de notas, experiências e opiniões sobre software, dados, ferramentas e tecnologia. O feed é pessoal, não um jornal profissional.
 
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind CSS
-- Supabase (Auth, Postgres, Storage)
-- Deploy: Vercel
+- Supabase opcional (Auth, Postgres e Storage)
+- Modo local para desenvolvimento, sem exigir Supabase
+
+O histórico, decisões, limitações conhecidas e próximos passos estão em [`docs/rgor-site/PROJECT-HANDOFF.md`](docs/rgor-site/PROJECT-HANDOFF.md). Não há implantação de produção confirmada neste contexto.
 
 ## Setup local
 
@@ -28,7 +30,7 @@ cp .env.example .env.local
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Mesma página (anon / publishable key)                    |
 | `NEXT_PUBLIC_SITE_URL`          | `http://localhost:3000` local; URL da Vercel em produção |
 
-Sem as vars do Supabase, o site usa **modo local**: admin com `ADMIN_PASSWORD` e posts em `data/posts.json`.
+Sem as vars do Supabase, o site usa **modo local**: admin com `ADMIN_PASSWORD`, posts em `data/posts.json` e uploads em `public/uploads/`. Configure uma senha própria em `.env.local`; o modo local e o armazenamento em disco são para desenvolvimento, não para hospedagem serverless.
 
 ### 3. Banco e storage
 
@@ -65,3 +67,5 @@ npm run dev
 | `/profile`      | Portfólio     |
 | `/admin`        | Login         |
 | `/admin/posts`  | CRUD          |
+
+O administrador também tem pré-visualizações internas em `/admin/inicio`, `/admin/posts/[id]/view` e `/admin/profile`, sem precisar sair da área administrativa. A URL pública pode ser aberta explicitamente.
